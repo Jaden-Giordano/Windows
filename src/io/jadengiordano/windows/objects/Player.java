@@ -21,6 +21,8 @@ public class Player extends GameObject {
 
     private Inventory inventory;
 
+    private float gravity = 9.81f;
+
     public Player() {
         super();
 
@@ -247,6 +249,8 @@ public class Player extends GameObject {
     public void move(Vector3 dir) {
         Vector3 pos = this.transform.getPosition();
         this.transform.setPosition(pos.add(possibleMove(dir).mul(speed * (float) Timer.deltaTime)));
+
+
     }
 
     private void pickupdate() {
@@ -285,16 +289,18 @@ public class Player extends GameObject {
             Vector2 mp = Windows.instance.getMouseCallback().getMousePosition();
 
             for (GameObject i : Windows.instance.getGame().getCurrentWorld().getObjects()) {
-                if (i instanceof Door) { // TODO make interactable class that door extends from (has use function)
+                if (i instanceof Interactable) {
                     Vector3 pos = i.transform.getPosition();
                     Vector2 sc = i.transform.getScale();
 
 
                     if (mp.x >= pos.x && mp.x <= pos.x + sc.x && mp.y >= pos.y && mp.y <= pos.y + sc.y
-                            /*&& Math.sqrt(Math.pow(pos.x-this.transform.getPosition().x, 2)+Math.pow(pos.y-this.transform.getPosition().y, 2)) < 3*50*/) { // TODO Check is blocks blocking view
-                        System.out.println("click");
-                        if (inventory.getItemByIndex(0) instanceof Key) { // TODO make all items have use function
-                            ((Key) inventory.getItemByIndex(0)).use((Door) i);
+                            && Math.sqrt(Math.pow(pos.x - this.transform.getPosition().x, 2) + Math.pow(pos.y - this.transform.getPosition().y, 2)) < 3 * 50) { // TODO Check is blocks blocking view
+                        if (i instanceof Lever) {
+                            ((Lever) i).use();
+                        }
+                        if (inventory.getItemByIndex(0) instanceof Key && i instanceof Door) { // TODO make all items have use function
+                            ((Key) inventory.getItemByIndex(0)).use((Interactable) i);
                         }
                     }
                 }
@@ -312,6 +318,7 @@ public class Player extends GameObject {
 
     public Inventory getInventory() {
         return inventory;
+
     }
 
 }

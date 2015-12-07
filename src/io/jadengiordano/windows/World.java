@@ -1,5 +1,6 @@
 package io.jadengiordano.windows;
 
+import io.jadengiordano.windows.objects.Lever;
 import io.jadengiordano.windows.objects.Player;
 import io.jadengiordano.windows.objects.candy.BlueCandy;
 import io.jadengiordano.windows.regs.ItemRegistry;
@@ -29,10 +30,10 @@ public class World {
                 0, -1, -1, -1, 1, -1, -1, -1, -1, 0,
                 0, -1, -1, -1, 1, -1, -1, -1, -1, 0,
                 0, 0, 0, 0, 0, 0, 3, 3, 3, 0,
-                0, -1, -1, -1, -1, 0, -1, -1, -1, 0,
-                0, -1, -1, -1, -1, 0, -1, -1, -1, 0,
-                0, -1, -1, -1, -1, 5, -1, -1, -1, 0,
-                0, -1, -1, -1, -1, 0, -1, -1, -1, 0,
+                0, -1, 0, -1, -1, 0, -1, -1, -1, 0,
+                0, -1, 0, -1, -1, 0, -1, -1, -1, 0,
+                0, -1, 5, -1, -1, 5, -1, -1, -1, 0,
+                0, -1, 0, -1, -1, 0, -1, -1, -1, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         for (int i = 2; i < t.length; i++) {
@@ -49,6 +50,18 @@ public class World {
         Item item = ItemRegistry.getItem(ItemRegistry.Items.GOLD_KEY.ordinal());
         item.transform.setPosition(new Vector3(8 * 50 + 15, 2 * 50 + 15, 0));
         this.objects.add(item);
+
+        Door o = null;
+        for (GameObject i : this.getObjects()) {
+            Vector3 pos = i.transform.getPosition();
+            if (pos.x == 2 * 50 && pos.y == 7 * 50)
+                o = (Door) i;
+        }
+        if (o != null) {
+            Lever lever = new Lever(o);
+            lever.transform.setPosition(3 * 50 + 20, 5 * 50, 0);
+            this.objects.add(lever);
+        }
     }
 
     public List<GameObject> getObjects() {

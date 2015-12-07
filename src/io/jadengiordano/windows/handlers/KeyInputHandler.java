@@ -1,5 +1,7 @@
-package io.jadengiordano.windows;
+package io.jadengiordano.windows.handlers;
 
+import io.jadengiordano.windows.InputHandler;
+import io.jadengiordano.windows.Windows;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
 import java.util.ArrayList;

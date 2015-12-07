@@ -1,6 +1,7 @@
 package io.jadengiordano.windows.items;
 
 import io.jadengiordano.windows.Door;
+import io.jadengiordano.windows.Interactable;
 import io.jadengiordano.windows.Item;
 
 /**
@@ -20,9 +21,9 @@ public class Key extends Item {
         this.keyType = keyType;
     }
 
-    public void use(Door door) {
-        if (door.getKeyType().ordinal() == this.keyType.ordinal()) {
-            door.unlock();
+    public void use(Interactable door) {
+        if (((Door) door).getKeyType().ordinal() == this.keyType.ordinal()) {
+            door.use();
         }
     }
 

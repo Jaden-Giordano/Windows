@@ -1,5 +1,7 @@
 package io.jadengiordano.windows;
 
+import io.jadengiordano.windows.handlers.KeyInputHandler;
+import io.jadengiordano.windows.handlers.MouseInputHandler;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;

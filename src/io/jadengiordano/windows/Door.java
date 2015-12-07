@@ -5,7 +5,7 @@ import io.jadengiordano.windows.items.Key;
 /**
  * Created by Jaden on 12/5/2015.
  */
-public abstract class Door extends Tile {
+public abstract class Door extends Attachable implements Interactable {
 
     protected boolean unlocked;
     protected Key.KeyType keyType;
@@ -23,13 +23,21 @@ public abstract class Door extends Tile {
     }
 
     // Returns is the door was unlocked.
-    public boolean unlock() {
+    public boolean use() {
         if (this.unlocked)
             return false;
         else {
             this.setSolid(false);
             return (this.unlocked = true);
         }
+    }
+
+    @Override
+    public void setState(boolean state) {
+        super.setState(state);
+
+        this.setSolid(!state);
+        this.unlocked = state;
     }
 
     public Key.KeyType getKeyType() {

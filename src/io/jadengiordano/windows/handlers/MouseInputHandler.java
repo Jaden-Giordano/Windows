@@ -1,5 +1,8 @@
-package io.jadengiordano.windows;
+package io.jadengiordano.windows.handlers;
 
+import io.jadengiordano.windows.InputHandler;
+import io.jadengiordano.windows.Vector2;
+import io.jadengiordano.windows.Windows;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
