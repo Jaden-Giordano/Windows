@@ -10,12 +10,16 @@ public abstract class GameObject {
     public Transform transform;
     protected Vector4 color;
 
+    public boolean remove;
+
     public GameObject() {
         this.transform = new Transform();
         this.color = new Vector4(0, 0, 0, 0);
+
+        remove = false;
     }
 
-    public void update(double dt) {
+    public void update() {
     }
 
     public void draw() {

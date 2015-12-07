@@ -1,6 +1,9 @@
 package io.jadengiordano.windows;
 
 import io.jadengiordano.windows.objects.Player;
+import io.jadengiordano.windows.objects.candy.BlueCandy;
+import io.jadengiordano.windows.regs.ItemRegistry;
+import io.jadengiordano.windows.regs.TileRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +23,17 @@ public class World {
     }
 
     private void loadTiles() {
-        int[] t = {5, 5,
-                0, 0, -1, 0, 0,
-                0, -1, -1, -1, 0,
-                -1, -1, -1, -1, 0,
-                0, -1, -1, -1, 0,
-                0, 0, 0, 0, 0};
+        int[] t = {10, 10,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, -1, -1, -1, 1, -1, -1, -1, -1, 0,
+                0, -1, -1, -1, 1, -1, -1, -1, -1, 0,
+                0, -1, -1, -1, 1, -1, -1, -1, -1, 0,
+                0, 0, 0, 0, 0, 0, 3, 3, 3, 0,
+                0, -1, -1, -1, -1, 0, -1, -1, -1, 0,
+                0, -1, -1, -1, -1, 0, -1, -1, -1, 0,
+                0, -1, -1, -1, -1, 5, -1, -1, -1, 0,
+                0, -1, -1, -1, -1, 0, -1, -1, -1, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         for (int i = 2; i < t.length; i++) {
             int x = (i - 2) % t[0];
@@ -34,15 +42,39 @@ public class World {
             tile.transform.setPosition(new Vector3(x * 50, y * 50, 0));
             this.objects.add(tile);
         }
+
+        BlueCandy bc = new BlueCandy(new Vector3(5 * 50 + 10, 2 * 50 + 10, 0));
+        this.objects.add(bc);
+
+        Item item = ItemRegistry.getItem(ItemRegistry.Items.GOLD_KEY.ordinal());
+        item.transform.setPosition(new Vector3(8 * 50 + 15, 2 * 50 + 15, 0));
+        this.objects.add(item);
     }
 
     public List<GameObject> getObjects() {
         return objects;
     }
 
-    public void update(double dt) {
+    public List<PickUp> getPickUps() {
+        List<PickUp> pickUps = new ArrayList<PickUp>();
         for (GameObject i : this.objects) {
-            i.update(dt);
+            if (i instanceof PickUp)
+                pickUps.add((PickUp) i);
+        }
+        return pickUps;
+    }
+
+    public void update() {
+        List<GameObject> rmv = new ArrayList<GameObject>();
+        for (GameObject i : this.objects) {
+            i.update();
+            if (i instanceof PickUp) {
+                if (((PickUp) i).remove)
+                    rmv.add(i);
+            }
+        }
+        for (GameObject i : rmv) {
+            this.objects.remove(i);
         }
     }
 

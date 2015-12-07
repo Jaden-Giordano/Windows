@@ -11,8 +11,8 @@ public class Game {
         world = new World();
     }
 
-    public void update(double dt) {
-        world.update(dt);
+    public void update() {
+        world.update();
     }
 
     public void draw() {

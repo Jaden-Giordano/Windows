@@ -1,7 +1,8 @@
 package io.jadengiordano.windows.objects;
 
-
 import io.jadengiordano.windows.*;
+import io.jadengiordano.windows.items.Key;
+import io.jadengiordano.windows.tiles.GlassTile;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -14,9 +15,11 @@ public class Player extends GameObject {
 
     private float speed = 90.0f;
 
+    private Color colour;
+
     private boolean[] keys;
 
-    private BoundingBox bound;
+    private Inventory inventory;
 
     public Player() {
         super();
@@ -25,64 +28,72 @@ public class Player extends GameObject {
 
         registerInputs();
 
-        this.transform.setScale(new Vector2(50, 50));
+        this.transform.setScale(new Vector2(40, 40));
         this.color = new Vector4(.5f, .5f, 1, 1);
+        this.colour = Color.RED;
 
-        this.transform.setPosition(new Vector3(50, 50, 0));
+        this.transform.setPosition(new Vector3(50 + 5, 50 + 5, 0));
 
-        this.bound = new BoundingBox(this.transform.getPosition(), this.transform.getScale());
+        this.inventory = new Inventory(4);
     }
 
     private void registerInputs() {
-        Windows.instance.getKeyInputHandler().registerKeyCallback(GLFW.GLFW_KEY_D, GLFW.GLFW_PRESS, new Runnable() {
+        Windows.instance.getKeyInputHandler().registerCallback(GLFW.GLFW_KEY_D, GLFW.GLFW_PRESS, new Runnable() {
             @Override
             public void run() {
                 keys[0] = true;
             }
         });
-        Windows.instance.getKeyInputHandler().registerKeyCallback(GLFW.GLFW_KEY_D, GLFW.GLFW_RELEASE, new Runnable() {
+        Windows.instance.getKeyInputHandler().registerCallback(GLFW.GLFW_KEY_D, GLFW.GLFW_RELEASE, new Runnable() {
             @Override
             public void run() {
                 keys[0] = false;
             }
         });
 
-        Windows.instance.getKeyInputHandler().registerKeyCallback(GLFW.GLFW_KEY_A, GLFW.GLFW_PRESS, new Runnable() {
+        Windows.instance.getKeyInputHandler().registerCallback(GLFW.GLFW_KEY_A, GLFW.GLFW_PRESS, new Runnable() {
             @Override
             public void run() {
                 keys[1] = true;
             }
         });
-        Windows.instance.getKeyInputHandler().registerKeyCallback(GLFW.GLFW_KEY_A, GLFW.GLFW_RELEASE, new Runnable() {
+        Windows.instance.getKeyInputHandler().registerCallback(GLFW.GLFW_KEY_A, GLFW.GLFW_RELEASE, new Runnable() {
             @Override
             public void run() {
                 keys[1] = false;
             }
         });
 
-        Windows.instance.getKeyInputHandler().registerKeyCallback(GLFW.GLFW_KEY_W, GLFW.GLFW_PRESS, new Runnable() {
+        Windows.instance.getKeyInputHandler().registerCallback(GLFW.GLFW_KEY_W, GLFW.GLFW_PRESS, new Runnable() {
             @Override
             public void run() {
                 keys[2] = true;
             }
         });
-        Windows.instance.getKeyInputHandler().registerKeyCallback(GLFW.GLFW_KEY_W, GLFW.GLFW_RELEASE, new Runnable() {
+        Windows.instance.getKeyInputHandler().registerCallback(GLFW.GLFW_KEY_W, GLFW.GLFW_RELEASE, new Runnable() {
             @Override
             public void run() {
                 keys[2] = false;
             }
         });
 
-        Windows.instance.getKeyInputHandler().registerKeyCallback(GLFW.GLFW_KEY_S, GLFW.GLFW_PRESS, new Runnable() {
+        Windows.instance.getKeyInputHandler().registerCallback(GLFW.GLFW_KEY_S, GLFW.GLFW_PRESS, new Runnable() {
             @Override
             public void run() {
                 keys[3] = true;
             }
         });
-        Windows.instance.getKeyInputHandler().registerKeyCallback(GLFW.GLFW_KEY_S, GLFW.GLFW_RELEASE, new Runnable() {
+        Windows.instance.getKeyInputHandler().registerCallback(GLFW.GLFW_KEY_S, GLFW.GLFW_RELEASE, new Runnable() {
             @Override
             public void run() {
                 keys[3] = false;
+            }
+        });
+
+        Windows.instance.getMouseCallback().registerCallback(GLFW.GLFW_MOUSE_BUTTON_1, GLFW.GLFW_PRESS, new Runnable() {
+            @Override
+            public void run() {
+                use();
             }
         });
     }
@@ -147,35 +158,12 @@ public class Player extends GameObject {
         move(dir);
     }
 
-    /*
-        public boolean canMove(Vector3 dir) {
-            List<Tile> tiles = new ArrayList<Tile>();
-            for (GameObject i : Windows.instance.getGame().getCurrentWorld().getObjects()) {
-                if (i instanceof Tile)
-                    tiles.add((Tile) i);
-            }
-            Vector3 p = this.transform.getPosition();
-            Vector3 npos = new Vector3((float) Math.floor(p.x / 50) + dir.x, (float) Math.floor(p.y / 50) + dir.y, 0);
-
-            for (Tile i : tiles) {
-                if (i.transform.getPosition().div(50).equals(npos)) {
-                    //System.out.println("------------------------------");
-                    //System.out.println("| Direction: "+dir.x+", "+dir.y+", "+dir.z);
-                    //System.out.println("| Tile: "+i.transform.getPosition().x + ", " + i.transform.getPosition().y + ", " + i.transform.getPosition().z + " : " + i.isSolid());
-                    if (i.isSolid())
-                        return false;
-                }
-            }
-
-            return true;
-        }
-    */
     public Vector3 possibleMove(Vector3 dir) {
         Vector3 p = this.transform.getPosition();
-        BoundingBox top = new BoundingBox(new Vector3(p.x + 1, p.y - 5f, 0f), new Vector2(48, 10));
-        BoundingBox left = new BoundingBox(new Vector3(p.x - 5f, p.y + 1, 0f), new Vector2(10, 48));
-        BoundingBox right = new BoundingBox(new Vector3(p.x + 45f, p.y + 1, 0f), new Vector2(10, 48));
-        BoundingBox bottom = new BoundingBox(new Vector3(p.x + 1, p.y + 45f, 0f), new Vector2(48, 10));
+        BoundingBox top = new BoundingBox(new Vector3(p.x + 1, p.y - 3f, 0f), new Vector2(38, 6));
+        BoundingBox left = new BoundingBox(new Vector3(p.x - 3f, p.y + 1, 0f), new Vector2(6, 38));
+        BoundingBox right = new BoundingBox(new Vector3(p.x + 37f, p.y + 1, 0f), new Vector2(6, 38));
+        BoundingBox bottom = new BoundingBox(new Vector3(p.x + 1, p.y + 37f, 0f), new Vector2(38, 6));
 
         List<Tile> tiles = new ArrayList<Tile>();
         for (GameObject i : Windows.instance.getGame().getCurrentWorld().getObjects()) {
@@ -183,79 +171,77 @@ public class Player extends GameObject {
                 tiles.add((Tile) i);
         }
 
-        System.out.println(p.x + ", " + p.y);
+        //System.out.println(p.x + ", " + p.y);
 
         for (Tile i : tiles) {
             if (i.isSolid()) {
                 BoundingBox it = new BoundingBox(i.transform.getPosition(), i.transform.getScale());
                 if (top.overlaps(it) && dir.y < 0) {
-                    System.out.println("TOP: " + it.pos.x + ", " + it.pos.y + " : " + String.valueOf(dir.x * 50 + p.x) + ", " + String.valueOf(dir.y * 50 + p.y));
-                    System.out.println("---------------------");
-                    dir.y += 1;
-                    this.transform.getPosition().y = it.pos.y + it.size.y;
+                    //System.out.println("TOP: " + it.pos.x + ", " + it.pos.y + " : " + String.valueOf(dir.x * 50 + p.x) + ", " + String.valueOf(dir.y * 50 + p.y));
+                    //System.out.println("---------------------");
+                    if (!(i instanceof GlassTile)) {
+                        dir.y = 0;
+                        this.transform.getPosition().y = it.pos.y + it.size.y;
+                    } else {
+                        if (((GlassTile) i).getColour().ordinal() != this.colour.ordinal()) {
+                            dir.y = 0;
+                            this.transform.getPosition().y = it.pos.y + it.size.y;
+                        } else {
+                            ((GlassTile) i).movedThrough(this);
+                        }
+                    }
                 }
                 if (bottom.overlaps(it) && dir.y > 0) {
-                    System.out.println("BOTTOM: " + it.pos.x + ", " + it.pos.y + " : " + String.valueOf(dir.x * 50 + p.x) + ", " + String.valueOf(dir.y * 50 + p.y));
-                    System.out.println("---------------------");
-                    dir.y -= 1;
-                    this.transform.getPosition().y = it.pos.y - this.transform.getScale().y;
+                    //System.out.println("BOTTOM: " + it.pos.x + ", " + it.pos.y + " : " + String.valueOf(dir.x * 50 + p.x) + ", " + String.valueOf(dir.y * 50 + p.y));
+                    //System.out.println("---------------------");
+                    if (!(i instanceof GlassTile)) {
+                        dir.y = 0;
+                        this.transform.getPosition().y = it.pos.y - this.transform.getScale().y;
+                    } else {
+                        if (((GlassTile) i).getColour().ordinal() != this.colour.ordinal()) {
+                            dir.y = 0;
+                            this.transform.getPosition().y = it.pos.y - this.transform.getScale().y;
+                        } else {
+                            ((GlassTile) i).movedThrough(this);
+                        }
+                    }
                 }
                 if (left.overlaps(it) && dir.x < 0) {
-                    System.out.println("LEFT: " + it.pos.x + ", " + it.pos.y + " : " + String.valueOf(dir.x * 50 + p.x) + ", " + String.valueOf(dir.y * 50 + p.y));
-                    System.out.println(left.pos.x + ", " + left.pos.y);
-                    System.out.println("---------------------");
-                    dir.x = 0;
-                    this.transform.getPosition().x = it.pos.x + it.size.x;
+                    //System.out.println("LEFT: " + it.pos.x + ", " + it.pos.y + " : " + String.valueOf(dir.x * 50 + p.x) + ", " + String.valueOf(dir.y * 50 + p.y));
+                    //System.out.println(left.pos.x + ", " + left.pos.y);
+                    //System.out.println("---------------------");
+                    if (!(i instanceof GlassTile)) {
+                        dir.x = 0;
+                        this.transform.getPosition().x = it.pos.x + it.size.x;
+                    } else {
+                        if (((GlassTile) i).getColour().ordinal() != this.colour.ordinal()) {
+                            dir.x = 0;
+                            this.transform.getPosition().x = it.pos.x + it.size.x;
+                        } else {
+                            ((GlassTile) i).movedThrough(this);
+                        }
+                    }
                 }
                 if (right.overlaps(it) && dir.x > 0) {
-                    System.out.println("RIGHT: " + it.pos.x + ", " + it.pos.y + " : " + dir.x * 50 + p.x + ", " + String.valueOf(dir.x * 50 + p.x) + ", " + String.valueOf(dir.y * 50 + p.y));
-                    System.out.println("---------------------");
-                    dir.x = 0;
-                    this.transform.getPosition().x = it.pos.x - this.transform.getScale().x;
-                }
-            }
-        }
-
-        return dir;
-        /*
-        tiles = new ArrayList<Tile>();
-        for (GameObject i : Windows.instance.getGame().getCurrentWorld().getObjects()) {
-            if (i instanceof Tile)
-                tiles.add((Tile) i);
-        }
-        Vector3 npos = new Vector3((float) Math.floor(p.x / 50) + dir.x, (float) Math.floor(p.y / 50) + dir.y, 0);
-
-        for (Tile i : tiles) {
-            if (i.transform.getPosition().div(50).equals(npos)) {
-                //System.out.println("------------------------------");
-                //System.out.println("| Direction: "+dir.x+", "+dir.y+", "+dir.z);
-                //System.out.println("| Tile: "+i.transform.getPosition().x + ", " + i.transform.getPosition().y + ", " + i.transform.getPosition().z + " : " + i.isSolid());
-                if (i.isSolid()) {
-                    float tx = i.transform.getPosition().x/50;
-                    float ty = i.transform.getPosition().y/50;
-                    boolean xbd = (npos.x >= tx && npos.x <= tx+50) || (npos.x+50 >= tx && npos.x+50 <= tx+50);
-                    boolean ybd = (npos.y >= ty && npos.y <= ty+50) || (npos.y+50 >= ty && npos.y+50 <= ty+50);
-                    if (xbd) {
-                        if (ybd) {
-                            return new Vector3(0 , 0, dir.z);
-                        }
-                        else {
-                            return new Vector3(0, dir.y, dir.z);
-                        }
+                    //System.out.println("RIGHT: " + it.pos.x + ", " + it.pos.y + " : " + dir.x * 50 + p.x + ", " + String.valueOf(dir.x * 50 + p.x) + ", " + String.valueOf(dir.y * 50 + p.y));
+                    //System.out.println("---------------------");
+                    if (!(i instanceof GlassTile)) {
+                        dir.x = 0;
+                        this.transform.getPosition().x = it.pos.x - this.transform.getScale().x;
                     }
                     else {
-                        if (ybd) {
-                            return new Vector3(dir.x , 0, dir.z);
-                        }
-                        else {
-                            return dir;
+                        if (((GlassTile) i).getColour().ordinal() != this.colour.ordinal()) {
+                            dir.x = 0;
+                            this.transform.getPosition().x = it.pos.x - this.transform.getScale().x;
+                        } else {
+                            ((GlassTile) i).movedThrough(this);
                         }
                     }
                 }
             }
         }
+
         return dir;
-        */
     }
 
     public void move(Vector3 dir) {
@@ -263,10 +249,69 @@ public class Player extends GameObject {
         this.transform.setPosition(pos.add(possibleMove(dir).mul(speed * (float) Timer.deltaTime)));
     }
 
-    public void update(double dt) {
-        super.update(dt);
+    private void pickupdate() {
+        BoundingBox pl = new BoundingBox(this.transform.getPosition(), this.transform.getScale());
+        for (PickUp i : Windows.instance.getGame().getCurrentWorld().getPickUps()) {
+            if (!i.remove) {
+                BoundingBox pk = new BoundingBox(i.transform.getPosition(), i.transform.getScale());
+                if (pk.overlaps(pl)) {
+                    i.pickUp(this);
+                }
+            }
+        }
+    }
+
+    public void update() {
+        super.update();
 
         movementUpdate();
+
+        pickupdate();
+/*
+        for (int i = 0; i < this.getInventory().size(); i++) {
+            Item item;
+            if ((item = this.inventory.getItemByIndex(i)) != null) {
+                System.out.println("Slot "+i+": "+item.getID());
+            }
+            else {
+                System.out.println("Slot "+i+": null");
+            }
+        }
+*/
+    }
+
+    public void use() {
+        if (inventory.getItemByIndex(0) != null) {
+            Vector2 mp = Windows.instance.getMouseCallback().getMousePosition();
+
+            for (GameObject i : Windows.instance.getGame().getCurrentWorld().getObjects()) {
+                if (i instanceof Door) { // TODO make interactable class that door extends from (has use function)
+                    Vector3 pos = i.transform.getPosition();
+                    Vector2 sc = i.transform.getScale();
+
+
+                    if (mp.x >= pos.x && mp.x <= pos.x + sc.x && mp.y >= pos.y && mp.y <= pos.y + sc.y
+                            /*&& Math.sqrt(Math.pow(pos.x-this.transform.getPosition().x, 2)+Math.pow(pos.y-this.transform.getPosition().y, 2)) < 3*50*/) { // TODO Check is blocks blocking view
+                        System.out.println("click");
+                        if (inventory.getItemByIndex(0) instanceof Key) { // TODO make all items have use function
+                            ((Key) inventory.getItemByIndex(0)).use((Door) i);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public void setColour(Color colour) {
+        this.colour = colour;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
 }

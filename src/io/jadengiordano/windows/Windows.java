@@ -21,6 +21,7 @@ public class Windows {
     // We need to strongly reference callback instances.
     private GLFWErrorCallback errorCallback;
     private KeyInputHandler keyCallback;
+    private MouseInputHandler mouseCallback;
 
     // The window handle
     public long window;
@@ -37,6 +38,7 @@ public class Windows {
             // Release window and window callbacks
             glfwDestroyWindow(window);
             keyCallback.release();
+            mouseCallback.release();
         } finally {
             // Terminate GLFW and release the GLFWErrorCallback
             glfwTerminate();
@@ -65,6 +67,7 @@ public class Windows {
 
         // Setup keycallback
         keyCallback = new KeyInputHandler();
+        mouseCallback = new MouseInputHandler();
 
         // Get the resolution of the primary monitor
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -101,11 +104,9 @@ public class Windows {
         glMatrixMode(GL_MATRIX_MODE);
 
         // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         game = new Game();
-
-        double t = 0.0;
 
         double oldTime = ((double) System.currentTimeMillis()) / 1000;
 
@@ -116,7 +117,7 @@ public class Windows {
             double dt = newTime - oldTime;
             Timer.deltaTime = dt;
             oldTime = newTime;
-            game.update(dt);
+            game.update();
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
@@ -132,6 +133,10 @@ public class Windows {
 
     public KeyInputHandler getKeyInputHandler() {
         return this.keyCallback;
+    }
+
+    public MouseInputHandler getMouseCallback() {
+        return this.mouseCallback;
     }
 
     public static void main(String[] args) {

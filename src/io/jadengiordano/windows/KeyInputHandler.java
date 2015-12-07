@@ -10,19 +10,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 /**
  * Created by Jaden on 11/29/2015.
  */
-public class KeyInputHandler {
-
-    protected class CallbackContainer {
-        public int key;
-        public int action;
-        public Runnable function;
-
-        public CallbackContainer(int key, int action, Runnable function) {
-            this.key = key;
-            this.action = action;
-            this.function = function;
-        }
-    }
+public class KeyInputHandler implements InputHandler {
 
     GLFWKeyCallback keyCallback;
 
@@ -42,7 +30,7 @@ public class KeyInputHandler {
         });
     }
 
-    public void registerKeyCallback(int key, int action, Runnable function) {
+    public void registerCallback(int key, int action, Runnable function) {
         this.callbacks.add(new CallbackContainer(key, action, function));
     }
 
