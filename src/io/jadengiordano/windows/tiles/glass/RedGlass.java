@@ -22,6 +22,6 @@ public class RedGlass extends GlassTile {
     public void movedThrough(Player p) {
         super.movedThrough(p);
 
-        p.setSpeed(120f);
+        //p.setSpeed(120f);
     }
 }

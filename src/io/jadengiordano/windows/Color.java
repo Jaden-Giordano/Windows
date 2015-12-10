@@ -9,6 +9,9 @@ public enum Color {
     RED,
     GREEN,
     BLACK,
+    VIOLET,
+    ORANGE,
+    YELLOW,
     NIGGER
 
 }

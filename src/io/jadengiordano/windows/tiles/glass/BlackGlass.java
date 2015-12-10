@@ -15,7 +15,8 @@ public class BlackGlass extends GlassTile {
     @Override
     public void movedThrough(Player p) {
         super.movedThrough(p);
-        p.setColour(Color.NIGGER);
+
+        //p.setColour(Color.NIGGER);
     }
 }
 

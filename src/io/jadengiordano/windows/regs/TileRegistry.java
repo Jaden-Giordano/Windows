@@ -4,10 +4,7 @@ import io.jadengiordano.windows.Tile;
 import io.jadengiordano.windows.objects.doors.GoldDoor;
 import io.jadengiordano.windows.tiles.DefaultTile;
 import io.jadengiordano.windows.tiles.WallTile;
-import io.jadengiordano.windows.tiles.glass.BlackGlass;
-import io.jadengiordano.windows.tiles.glass.BlueGlass;
-import io.jadengiordano.windows.tiles.glass.GreenGlass;
-import io.jadengiordano.windows.tiles.glass.RedGlass;
+import io.jadengiordano.windows.tiles.glass.*;
 
 /**
  * Created by Jaden on 12/2/2015.
@@ -21,6 +18,9 @@ public class TileRegistry {
         BLUE_GLASS,
         BLACK_GLASS,
         GOLD_DOOR,
+        ORANGE_GLASS,
+        YELLOW_GLASS,
+        VIOLET_GLASS
     }
 
     public static Tile getTile(int tileID) {
@@ -36,6 +36,12 @@ public class TileRegistry {
             return new BlackGlass(tileID);
         if (tileID == Tiles.GOLD_DOOR.ordinal())
             return new GoldDoor(tileID);
+        if (tileID == Tiles.ORANGE_GLASS.ordinal())
+            return new OrangeGlass(tileID);
+        if (tileID == Tiles.YELLOW_GLASS.ordinal())
+            return new YellowGlass(tileID);
+        if (tileID == Tiles.VIOLET_GLASS.ordinal())
+            return new VioletGlass(tileID);
         return new DefaultTile(-1);
     }
 

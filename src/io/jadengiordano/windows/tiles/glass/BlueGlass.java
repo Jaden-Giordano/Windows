@@ -20,7 +20,7 @@ public class BlueGlass extends GlassTile {
     public void movedThrough(Player p) {
         super.movedThrough(p);
 
-        p.setSpeed(90f);
+        //p.setSpeed(90f);
     }
 
 }
