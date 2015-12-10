@@ -13,4 +13,5 @@ public class DefaultTile extends Tile {
 
         this.color = new Vector4(1, 1, 1, 1);
     }
+
 }

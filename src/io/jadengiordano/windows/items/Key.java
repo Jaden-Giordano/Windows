@@ -23,7 +23,9 @@ public class Key extends Item {
 
     public void use(Interactable door) {
         if (((Door) door).getKeyType().ordinal() == this.keyType.ordinal()) {
+            System.out.println("Key used");
             door.use();
+            this.inv_rmv = true;
         }
     }
 

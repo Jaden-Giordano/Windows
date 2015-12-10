@@ -9,9 +9,12 @@ import io.jadengiordano.windows.objects.Player;
 public abstract class Item extends PickUp {
 
     private int id;
+    public boolean inv_rmv;
 
     public Item(int id) {
         this.id = id;
+
+        this.inv_rmv = false;
 
         this.transform.setScale(new Vector2(20, 20));
     }

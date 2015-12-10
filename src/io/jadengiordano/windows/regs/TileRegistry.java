@@ -3,6 +3,7 @@ package io.jadengiordano.windows.regs;
 import io.jadengiordano.windows.Tile;
 import io.jadengiordano.windows.objects.doors.GoldDoor;
 import io.jadengiordano.windows.tiles.DefaultTile;
+import io.jadengiordano.windows.tiles.NextLevelTile;
 import io.jadengiordano.windows.tiles.WallTile;
 import io.jadengiordano.windows.tiles.glass.*;
 
@@ -20,7 +21,8 @@ public class TileRegistry {
         GOLD_DOOR,
         ORANGE_GLASS,
         YELLOW_GLASS,
-        VIOLET_GLASS
+        VIOLET_GLASS,
+        NEXT_LEVEL_TILE
     }
 
     public static Tile getTile(int tileID) {
@@ -42,6 +44,8 @@ public class TileRegistry {
             return new YellowGlass(tileID);
         if (tileID == Tiles.VIOLET_GLASS.ordinal())
             return new VioletGlass(tileID);
+        if (tileID == Tiles.NEXT_LEVEL_TILE.ordinal())
+            return new NextLevelTile(tileID);
         return new DefaultTile(-1);
     }
 

@@ -20,6 +20,14 @@ public class Inventory {
         return null;
     }
 
+    public void update() {
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] != null)
+                if (items[i].inv_rmv)
+                    items[i] = null;
+        }
+    }
+
     public Item getItem(int id) {
         for (Item i : items) {
             if (i.getID() == id)

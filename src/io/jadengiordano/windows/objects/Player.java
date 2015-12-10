@@ -168,7 +168,7 @@ public class Player extends GameObject {
         BoundingBox bottom = new BoundingBox(new Vector3(p.x + 1, p.y + 37f, 0f), new Vector2(38, 6));
 
         List<Tile> tiles = new ArrayList<Tile>();
-        for (GameObject i : Windows.instance.getGame().getCurrentWorld().getObjects()) {
+        for (GameObject i : Windows.instance.getGame().getCurrentGameSet().getCurrentWorld().getObjects()) {
             if (i instanceof Tile)
                 tiles.add((Tile) i);
         }
@@ -246,6 +246,27 @@ public class Player extends GameObject {
         return dir;
     }
 
+    private void interactUpdate() {
+        Vector3 p = this.transform.getPosition();
+        BoundingBox top = new BoundingBox(new Vector3(p.x + 1, p.y - 3f, 0f), new Vector2(38, 6));
+        BoundingBox left = new BoundingBox(new Vector3(p.x - 3f, p.y + 1, 0f), new Vector2(6, 38));
+        BoundingBox right = new BoundingBox(new Vector3(p.x + 37f, p.y + 1, 0f), new Vector2(6, 38));
+        BoundingBox bottom = new BoundingBox(new Vector3(p.x + 1, p.y + 37f, 0f), new Vector2(38, 6));
+
+        List<Tile> tiles = new ArrayList<Tile>();
+        for (GameObject i : Windows.instance.getGame().getCurrentGameSet().getCurrentWorld().getObjects()) {
+            if (i instanceof InteractableTile)
+                tiles.add((Tile) i);
+        }
+
+        for (Tile i : tiles) {
+            BoundingBox it = new BoundingBox(i.transform.getPosition(), i.transform.getScale());
+            if (top.overlaps(it) || left.overlaps(it) || right.overlaps(it) || bottom.overlaps(it)) {
+                ((InteractableTile) i).movedThrough(this);
+            }
+        }
+    }
+
     public void move(Vector3 dir) {
         Vector3 pos = this.transform.getPosition();
         this.transform.setPosition(pos.add(possibleMove(dir).mul(speed * (float) Timer.deltaTime)));
@@ -255,7 +276,7 @@ public class Player extends GameObject {
 
     private void pickupdate() {
         BoundingBox pl = new BoundingBox(this.transform.getPosition(), this.transform.getScale());
-        for (PickUp i : Windows.instance.getGame().getCurrentWorld().getPickUps()) {
+        for (PickUp i : Windows.instance.getGame().getCurrentGameSet().getCurrentWorld().getPickUps()) {
             if (!i.remove) {
                 BoundingBox pk = new BoundingBox(i.transform.getPosition(), i.transform.getScale());
                 if (pk.overlaps(pl)) {
@@ -269,6 +290,8 @@ public class Player extends GameObject {
         super.update();
 
         movementUpdate();
+
+        interactUpdate();
 
         pickupdate();
 /*
@@ -285,20 +308,20 @@ public class Player extends GameObject {
     }
 
     public void use() {
-        if (inventory.getItemByIndex(0) != null) {
-            Vector2 mp = Windows.instance.getMouseCallback().getMousePosition();
+        this.inventory.update();
+        Vector2 mp = Windows.instance.getMouseCallback().getMousePosition();
 
-            for (GameObject i : Windows.instance.getGame().getCurrentWorld().getObjects()) {
-                if (i instanceof Interactable) {
-                    Vector3 pos = i.transform.getPosition();
-                    Vector2 sc = i.transform.getScale();
+        for (GameObject i : Windows.instance.getGame().getCurrentGameSet().getCurrentWorld().getObjects()) {
+            if (i instanceof Interactable) {
+                Vector3 pos = i.transform.getPosition();
+                Vector2 sc = i.transform.getScale();
 
-
-                    if (mp.x >= pos.x && mp.x <= pos.x + sc.x && mp.y >= pos.y && mp.y <= pos.y + sc.y
-                            && Math.sqrt(Math.pow(pos.x - this.transform.getPosition().x, 2) + Math.pow(pos.y - this.transform.getPosition().y, 2)) < 3 * 50) { // TODO Check is blocks blocking view
-                        if (i instanceof Lever) {
-                            ((Lever) i).use();
-                        }
+                if (mp.x >= pos.x && mp.x <= pos.x + sc.x && mp.y >= pos.y && mp.y <= pos.y + sc.y
+                        && Math.sqrt(Math.pow(pos.x - this.transform.getPosition().x, 2) + Math.pow(pos.y - this.transform.getPosition().y, 2)) < 3 * 50) { // TODO Check is blocks blocking view
+                    if (i instanceof Lever) {
+                        ((Lever) i).use();
+                    }
+                    if (inventory.getItemByIndex(0) != null) {
                         if (inventory.getItemByIndex(0) instanceof Key && i instanceof Door) { // TODO make all items have use function
                             ((Key) inventory.getItemByIndex(0)).use((Interactable) i);
                         }
