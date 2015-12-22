@@ -21,10 +21,8 @@ public class Player extends GameObject {
 
     private Inventory inventory;
 
-    private float gravity = 9.81f;
-
-    public Player() {
-        super();
+    public Player(World w) {
+        super(w);
 
         this.keys = new boolean[4];
 
@@ -33,8 +31,6 @@ public class Player extends GameObject {
         this.transform.setScale(new Vector2(40, 40));
         this.color = new Vector4(.5f, .5f, 1, 1);
         this.colour = Color.RED;
-
-        this.transform.setPosition(new Vector3(50 + 5, 50 + 5, 0));
 
         this.inventory = new Inventory(4);
     }
@@ -95,7 +91,8 @@ public class Player extends GameObject {
         Windows.instance.getMouseCallback().registerCallback(GLFW.GLFW_MOUSE_BUTTON_1, GLFW.GLFW_PRESS, new Runnable() {
             @Override
             public void run() {
-                use();
+                if (world.equals(Windows.instance.getGame().getCurrentGameSet().getCurrentWorld()))
+                    use();
             }
         });
     }
@@ -317,8 +314,9 @@ public class Player extends GameObject {
                 Vector2 sc = i.transform.getScale();
 
                 if (mp.x >= pos.x && mp.x <= pos.x + sc.x && mp.y >= pos.y && mp.y <= pos.y + sc.y
-                        && Math.sqrt(Math.pow(pos.x - this.transform.getPosition().x, 2) + Math.pow(pos.y - this.transform.getPosition().y, 2)) < 3 * 50) { // TODO Check is blocks blocking view
+                        /*&& Math.sqrt(Math.pow(pos.x - this.transform.getPosition().x, 2) + Math.pow(pos.y - this.transform.getPosition().y, 2)) < 3 * 50*/) { // TODO Check is blocks blocking view
                     if (i instanceof Lever) {
+                        System.out.println("lever clicked");
                         ((Lever) i).use();
                     }
                     if (inventory.getItemByIndex(0) != null) {

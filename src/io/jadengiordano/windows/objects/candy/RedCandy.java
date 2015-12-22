@@ -1,9 +1,6 @@
 package io.jadengiordano.windows.objects.candy;
 
-import io.jadengiordano.windows.Candy;
-import io.jadengiordano.windows.Color;
-import io.jadengiordano.windows.Vector3;
-import io.jadengiordano.windows.Vector4;
+import io.jadengiordano.windows.*;
 import io.jadengiordano.windows.objects.Player;
 
 /**
@@ -11,8 +8,8 @@ import io.jadengiordano.windows.objects.Player;
  */
 public class RedCandy extends Candy {
 
-    public RedCandy(Vector3 pos) {
-        super(pos);
+    public RedCandy(World w, Vector3 pos) {
+        super(w, pos);
 
         this.color = new Vector4(1, 0, 0, 1);
     }

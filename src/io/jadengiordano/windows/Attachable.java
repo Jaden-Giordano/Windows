@@ -7,8 +7,8 @@ public class Attachable extends Tile {
 
     protected boolean state;
 
-    public Attachable(int tileID) {
-        super(tileID);
+    public Attachable(World w, int tileID) {
+        super(w, tileID);
     }
 
     public boolean getState() {

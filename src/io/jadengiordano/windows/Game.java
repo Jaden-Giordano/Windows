@@ -8,12 +8,18 @@ import java.util.List;
  */
 public class Game {
 
-    World world;
+    MainMenu mainMenu;
 
     List<GameSet> games;
     int current;
 
+    private GameState state;
+
     public Game() {
+        state = GameState.MENU;
+
+        mainMenu = new MainMenu();
+
         games = new ArrayList<GameSet>();
 
         current = 0;
@@ -22,15 +28,48 @@ public class Game {
     }
 
     public void update() {
-        getCurrentGameSet().update();
+        switch (state) {
+            case MENU: {
+                mainMenu.update();
+                break;
+            }
+            case PLAY: {
+                getCurrentGameSet().update();
+                break;
+            }
+            case PAUSE: {
+                // IDK
+                break;
+            }
+        }
     }
 
     public void draw() {
-        getCurrentGameSet().draw();
+        switch (state) {
+            case MENU: {
+                mainMenu.draw();
+                break;
+            }
+            case PLAY: {
+                getCurrentGameSet().draw();
+                break;
+            }
+            case PAUSE: {
+                // IDK
+                break;
+            }
+        }
     }
 
     public GameSet getCurrentGameSet() {
         return this.games.get(current);
     }
 
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
+    public GameState getState() {
+        return state;
+    }
 }

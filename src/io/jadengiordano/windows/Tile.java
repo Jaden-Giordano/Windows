@@ -9,8 +9,8 @@ public abstract class Tile extends GameObject {
 
     private int tileID;
 
-    public Tile(int tileID) {
-        super();
+    public Tile(World w, int tileID) {
+        super(w);
 
         solid = false;
         this.tileID = tileID;

@@ -8,10 +8,14 @@ import java.util.List;
  */
 public class World {
 
-    List<GameObject> objects;
+    public GameSet gameSet;
 
-    public World() {
+    protected List<GameObject> objects;
+
+    public World(GameSet gameSet) {
         this.objects = new ArrayList<GameObject>();
+
+        this.gameSet = gameSet;
     }
 
     public List<GameObject> getObjects() {

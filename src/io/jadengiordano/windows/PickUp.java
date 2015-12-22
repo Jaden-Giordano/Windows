@@ -7,8 +7,8 @@ import io.jadengiordano.windows.objects.Player;
  */
 public abstract class PickUp extends GameObject {
 
-    protected PickUp() {
-        super();
+    protected PickUp(World w) {
+        super(w);
     }
 
     public void pickUp(Player p) {

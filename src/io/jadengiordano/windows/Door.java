@@ -10,8 +10,8 @@ public abstract class Door extends Attachable implements Interactable {
     protected boolean unlocked;
     protected Key.KeyType keyType;
 
-    public Door(int tileID, Key.KeyType keyType) {
-        super(tileID);
+    public Door(World w, int tileID, Key.KeyType keyType) {
+        super(w, tileID);
 
         this.keyType = keyType;
 

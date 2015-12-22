@@ -18,6 +18,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 public class MouseInputHandler implements InputHandler {
 
     GLFWMouseButtonCallback mouseCallback;
+    GLFWCursorPosCallback cursorPosCallback;
 
     List<CallbackContainer> callbacks;
 
@@ -28,7 +29,7 @@ public class MouseInputHandler implements InputHandler {
 
         this.pos = new Vector2(0, 0);
 
-        glfwSetCursorPosCallback(Windows.instance.window, new GLFWCursorPosCallback() {
+        glfwSetCursorPosCallback(Windows.instance.window, cursorPosCallback = new GLFWCursorPosCallback() {
             @Override
             public void invoke(long window, double xpos, double ypos) {
                 pos = new Vector2((float) xpos, (float) ypos);
@@ -53,6 +54,7 @@ public class MouseInputHandler implements InputHandler {
 
     @Override
     public void release() {
+        this.cursorPosCallback.release();
         this.mouseCallback.release();
     }
 

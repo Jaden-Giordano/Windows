@@ -11,7 +11,8 @@ public abstract class Item extends PickUp {
     private int id;
     public boolean inv_rmv;
 
-    public Item(int id) {
+    public Item(World w, int id) {
+        super(w);
         this.id = id;
 
         this.inv_rmv = false;

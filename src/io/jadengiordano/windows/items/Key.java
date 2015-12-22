@@ -3,6 +3,7 @@ package io.jadengiordano.windows.items;
 import io.jadengiordano.windows.Door;
 import io.jadengiordano.windows.Interactable;
 import io.jadengiordano.windows.Item;
+import io.jadengiordano.windows.World;
 
 /**
  * Created by Jaden on 12/5/2015.
@@ -15,8 +16,8 @@ public class Key extends Item {
 
     protected KeyType keyType;
 
-    public Key(int id, KeyType keyType) {
-        super(id);
+    public Key(World w, int id, KeyType keyType) {
+        super(w, id);
 
         this.keyType = keyType;
     }

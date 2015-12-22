@@ -2,6 +2,7 @@ package io.jadengiordano.windows.tiles.glass;
 
 import io.jadengiordano.windows.Color;
 import io.jadengiordano.windows.Vector4;
+import io.jadengiordano.windows.World;
 import io.jadengiordano.windows.objects.Player;
 import io.jadengiordano.windows.tiles.GlassTile;
 
@@ -12,8 +13,8 @@ import io.jadengiordano.windows.tiles.GlassTile;
  */
 public class RedGlass extends GlassTile {
 
-    public RedGlass(int tileID) {
-        super(tileID, Color.RED);
+    public RedGlass(World w, int tileID) {
+        super(w, tileID, Color.RED);
 
         this.color = new Vector4(1f, 0, 0, 1f);
     }

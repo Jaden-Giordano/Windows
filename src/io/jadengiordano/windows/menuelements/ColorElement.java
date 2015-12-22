@@ -1,32 +1,26 @@
-package io.jadengiordano.windows;
+package io.jadengiordano.windows.menuelements;
+
+import io.jadengiordano.windows.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Created by Jaden on 11/29/2015.
+ * Created by Jaden on 12/22/2015.
  */
-public abstract class GameObject {
+public class ColorElement extends MenuElement {
 
-    public Transform transform;
     protected Vector4 color;
 
-    public boolean remove;
+    public ColorElement(Menu menu, Vector4 color) {
+        super(menu);
 
-    public World world;
-
-    public GameObject(World world) {
-        this.transform = new Transform();
-        this.color = new Vector4(0, 0, 0, 0);
-
-        remove = false;
-
-        this.world = world;
+        this.color = color;
     }
 
-    public void update() {
-    }
-
+    @Override
     public void draw() {
+        super.draw();
+
         //Draw TODO Make components
         glPushMatrix();
         {
@@ -58,5 +52,4 @@ public abstract class GameObject {
         }
         glPopMatrix();
     }
-
 }

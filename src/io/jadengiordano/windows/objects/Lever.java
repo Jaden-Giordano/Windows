@@ -1,9 +1,6 @@
 package io.jadengiordano.windows.objects;
 
-import io.jadengiordano.windows.Attachable;
-import io.jadengiordano.windows.GameObject;
-import io.jadengiordano.windows.Interactable;
-import io.jadengiordano.windows.Vector4;
+import io.jadengiordano.windows.*;
 
 /**
  * Created by Jaden on 12/6/2015.
@@ -12,8 +9,8 @@ public class Lever extends GameObject implements Interactable {
 
     Attachable attached;
 
-    public Lever(Attachable attached) {
-        super();
+    public Lever(World w, Attachable attached) {
+        super(w);
 
         this.attached = attached;
 

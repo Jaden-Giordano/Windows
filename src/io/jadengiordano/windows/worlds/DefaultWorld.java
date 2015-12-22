@@ -1,5 +1,6 @@
-package io.jadengiordano.windows;
+package io.jadengiordano.windows.worlds;
 
+import io.jadengiordano.windows.*;
 import io.jadengiordano.windows.objects.Lever;
 import io.jadengiordano.windows.objects.Player;
 import io.jadengiordano.windows.objects.candy.BlueCandy;
@@ -11,12 +12,14 @@ import io.jadengiordano.windows.regs.TileRegistry;
  */
 public class DefaultWorld extends World {
 
-    public DefaultWorld() {
-        super();
+    public DefaultWorld(GameSet g) {
+        super(g);
 
         loadTiles();
 
-        this.objects.add(new Player());
+        Player player = new Player(this);
+        player.transform.setPosition(new Vector3(50 + 5, 50 + 5, 0));
+        this.objects.add(player);
     }
 
     private void loadTiles() {
@@ -35,15 +38,15 @@ public class DefaultWorld extends World {
         for (int i = 2; i < t.length; i++) {
             int x = (i - 2) % t[0];
             int y = (int) Math.floor((i - 2) / t[1]);
-            Tile tile = TileRegistry.getTile(t[i]);
+            Tile tile = TileRegistry.getTile(this, t[i]);
             tile.transform.setPosition(new Vector3(x * 50, y * 50, 0));
             this.objects.add(tile);
         }
 
-        BlueCandy bc = new BlueCandy(new Vector3(5 * 50 + 10, 2 * 50 + 10, 0));
+        BlueCandy bc = new BlueCandy(this, new Vector3(5 * 50 + 10, 2 * 50 + 10, 0));
         this.objects.add(bc);
 
-        Item item = ItemRegistry.getItem(ItemRegistry.Items.GOLD_KEY.ordinal());
+        Item item = ItemRegistry.getItem(this, ItemRegistry.Items.GOLD_KEY.ordinal());
         item.transform.setPosition(new Vector3(8 * 50 + 15, 2 * 50 + 15, 0));
         this.objects.add(item);
 
@@ -54,7 +57,7 @@ public class DefaultWorld extends World {
                 o = (Door) i;
         }
         if (o != null) {
-            Lever lever = new Lever(o);
+            Lever lever = new Lever(this, o);
             lever.transform.setPosition(3 * 50 + 20, 5 * 50, 0);
             this.objects.add(lever);
         }
